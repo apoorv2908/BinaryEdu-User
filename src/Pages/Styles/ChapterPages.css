@@ -1,0 +1,34 @@
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    border: 1px solid black;
+   /* Full width */
+  }
+  
+  .page-image {
+    width: auto;
+    height: auto;
+    border: 1px solid black;
+
+  }
+  
+  .page-text {
+    padding: 20px;
+    font-size: 16px;
+    text-align: justify;
+    white-space: pre-wrap;
+  }
+  
+  .flip-page {
+       overflow: hidden; /* Remove scrollbars */
+  }
+  

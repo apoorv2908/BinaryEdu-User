@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { Button, Form, Modal } from 'react-bootstrap';
 import config from '../../config';
 
-const Teacherregister = () => {
+const Addteachers = () => {
   const [teacherName, setTeacherName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,12 +17,8 @@ const Teacherregister = () => {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [showModal, setShowModal] = useState(true);
-
+  const [manualSchool, setManualSchool] = useState('');
+  const [manualEntry, setManualEntry] = useState(false); // State for manual entry flag
   const navigate = useNavigate();
 
   const apiKey = 'SmNzN3BHZTFvRTlmQW43MG01M0hleThOVFFGVnF6c0RPbEF4cmJIRQ==';
@@ -102,35 +96,6 @@ const Teacherregister = () => {
     }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('email', loginEmail);
-    formData.append('password', loginPassword);
-
-    try {
-      const response = await fetch(`${config.apiBaseUrl}/fullmarks-user/user/login.php`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      if (data.success) {
-        setLoggedInUser(data.username);
-        setLoginError('');
-        setShowModal(false);
-
-        // Close the login form modal (assumed to be a modal)
-        // Implement modal close logic here
-      } else {
-        setLoginError('Username/password not found');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setLoginError('Error during login');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -143,7 +108,7 @@ const Teacherregister = () => {
     formData.append('state', state);
     formData.append('city', city);
     formData.append('zipcode', zipcode);
-    formData.append('school', school);
+    formData.append('school', manualEntry ? manualSchool : school); // Use manualSchool if manual entry is checked
     if (profilePic) {
       formData.append('profilePic', profilePic);
     }
@@ -156,7 +121,7 @@ const Teacherregister = () => {
       const data = await response.json();
       if (data.success) {
         alert('Teacher added successfully');
-        navigate("/");
+        navigate("/teachers");
       } else {
         alert('Failed to add teacher');
       }
@@ -167,162 +132,139 @@ const Teacherregister = () => {
   };
 
   return (
-    <div className='m-5 p-5'>
-    <div className= 'd-flex justify-content-center'>
-  <div className="col-md-8">
-  <div className= ''>
-            Home / Login / Register
-        </div>
-        
-    
-    <div className=" p-4 mt-3 bg-light shadow-lg mb-5 bg-white rounded">
-      <div className='h5 p-2' style={{ backgroundColor: "#0A1172", borderRadius: "5px", color: "white" }}>Registration (Teacher)</div>
-
-                  <form onSubmit={handleSubmit} encType="multipart/form-data" >
-                    <br></br>
-                    <div>
-                        <div>
-                          <label className='fw-bold'>Teacher Name</label>
-                          <input
-                            className='mt-3 xyf cursor form-control'
-                            placeholder='Enter Teacher Name'
-                            value={teacherName}
-                            onChange={(e) => setTeacherName(e.target.value)}
-                            required
-                          /><br></br>
-                        </div>
-                        <div>
-                          <label className='fw-bold'>Email</label>
-                          <input
-                            className='form-control mt-3 cursor'
-                            type='email'
-                            placeholder='Enter Email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                          /><br />
-                        </div>
-                        <div>
-                          <label className='fw-bold'>Contact Number</label><br />
-                          <input
-                            className='form-control mt-3 cursor'
-                            placeholder='Enter Contact Number'
-                            value={contactNumber}
-                            onChange={(e) => setContactNumber(e.target.value)}
-                            required
-                          /><br />
-                        </div>
-                      <div><label className='fw-bold'>School</label><br />
-                        <select
-                          className='form-control mt-3 cursor'
-                          value={school}
-                          onChange={(e) => setSchool(e.target.value)}
-                        >
-                          <option value="">Select School</option>
-                          {schools.map((school) => (
-                            <option key={school.school_id} value={school.school_id}>{school.school_name}</option>
-                          ))}
-                        </select><br /></div>
-                      
-                      <div>
-                        <label className='fw-bold'>Country</label><br />
-                        <select
-                          className='form-control mt-3 cursor'
-                          value={country}
-                          onChange={(e) => setCountry(e.target.value)}
-                        >
-                          <option value="">Select Country</option>
-                          {countries.map((country) => (
-                            <option key={country.iso2} value={country.iso2}>{country.name}</option>
-                          ))}
-                        </select><br />
-                      </div>
-                        <div>
-                          <label className='fw-bold'>State</label><br />
-                          <select
-                            className='form-control mt-3 cursor'
-                            value={state}
-                            onChange={(e) => setState(e.target.value)}
-                          >
-                            <option value="">Select State</option>
-                            {states.map((state) => (
-                              <option key={state.iso2} value={state.iso2}>{state.name}</option>
-                            ))}
-                          </select><br />
-                        </div>
-                        <div>
-                          <label className='fw-bold'>City</label><br />
-                          <select
-                            className='form-control mt-3 cursor'
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                          >
-                            <option value="">Select City</option>
-                            {cities.map((city) => (
-                              <option key={city.id} value={city.id}>{city.name}</option>
-                            ))}
-                          </select><br />
-                        </div>
-                        <div>
-                          <label className='fw-bold'>Zipcode</label><br />
-                          <input
-                            className='form-control mt-3 cursor'
-                            placeholder='Enter Zipcode'
-                            value={zipcode}
-                            onChange={(e) => setZipcode(e.target.value)}
-                          /><br />
-                        </div>
-                      <div className='d-flex justify-content-between'>
-                       
-                        <div>
-                          <label className='fw-bold'>Password</label><br />
-                          <input
-                            className='form-control mt-3 cursor'
-                            type='password'
-                            placeholder='Enter Password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                          /><br />
-                        </div>
-                      </div>
-                      <div className='d-flex justify-content-between'>
-                        <div>
-                          <label className='fw-bold'>Profile Picture</label><br />
-                          <input
-                            className=' form-control mt-3 cursor'
-                            type='file'
-                            accept='image/*'
-                            onChange={(e) => setProfilePic(e.target.files[0])}
-                          />
-                        </div>
-                      </div>
-                      <br></br>
-                      <div className= 'd-flex justify-content-end'>
-                      <Button style={{ backgroundColor: "#0A1172", outline: "none", border: "none" }} type="submit" className="mt-3">
-                        Register
-                      </Button>
-
-
-
-                      </div>
-                      <div className= 'd-flex justify-content-end mt-2'>
-                        <Link to = "/login-teacher">
-                        Already User? Sign in
-
-                        </Link>
-                      </div>
-                    </div>
-                    
-                  </form>
+    <div>
+        <div className="col-md-12">
+            {/* Topbar */}
+            <div className="row" >
+              <div className="col-md-12 bg-white shadow-lg mb-5 p-3 bg-white rounded " >
+                <div className='text-grey h5 p-3' style={{ backgroundColor: "#0A1172", borderRadius: "5px", color: "white" }}>
+                  Sign up as Teacher
                 </div>
+                <hr></hr>
+                <form onSubmit={handleSubmit}  encType="multipart/form-data">
+                  <label className='fw-bold'>Teacher Name<span className= 'text-danger'>*</span></label><br />
+                  <input
+                    className= 'form-control mt-3 cursor'
+                    placeholder='Enter Teacher Name'
+                    value={teacherName}
+                    onChange={(e) => setTeacherName(e.target.value)}
+                    required
+                  /><br /><br></br>
+                  <label className='fw-bold'>Email<span className= 'text-danger'>*</span></label><br />
+                  <input
+                    className= 'form-control mt-3 cursor'
+                    type='email'
+                    placeholder='Enter Email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  /><br /><br></br>
+                  <label className='fw-bold'>Password<span className= 'text-danger'>*</span></label><br />
+                  <input
+                    className= 'form-control mt-3 cursor'
+                    type='password'
+                    placeholder='Enter Password'
+                    value={password}
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                  /><br /><br></br>
+                  <label className='fw-bold'>Contact Number<span className= 'text-danger'>*</span></label><br />
+                  <input
+                    className= 'form-control mt-3 cursor'
+                    placeholder='Enter Contact Number'
+                    value={contactNumber}
+                    required
+                    onChange={(e) => setContactNumber(e.target.value)}
+                  /><br /><br></br>
+      
+                  <label className='fw-bold'>School<span className= 'text-danger'>*</span></label><br />
+                    <select
+                    className= 'form-control mt-3 cursor'
+                    value={school}
+                      onChange={(e) => setSchool(e.target.value)}
+                      disabled={manualEntry} // Disable dropdown if manual entry is enabled
+                    >
+                      <option value="">Select School</option>
+                      {schools.map((school) => (
+                        <option key={school.school_id} value={school.school_id}>{school.school_name}</option>
+                      ))}
+                    </select><br /><br></br>
+                    <div className= 'fw-bold text-danger'>
+                      <input
+                        type="checkbox"
+                        checked={manualEntry}
+                        onChange={() => setManualEntry(!manualEntry)}
+                      />{' '}
+                      Didn't find your school? Enter manually
+                    </div>
+                    {manualEntry && (
+                      <div>
+                        <input
+                    className= 'form-control mt-3 cursor'
+                    placeholder='Enter School Name'
+                          value={manualSchool}
+                          onChange={(e) => setManualSchool(e.target.value)}
+                          required
+                        /><br />
+                      </div>
+                    )}
+                    <br></br>
+                  <label className='fw-bold'>Country<span className= 'text-danger'>*</span></label><br />
+                  <select
+                    className= 'form-control mt-3 cursor'
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                  >
+                    <option value="">Select Country</option>
+                    {countries.map((country) => (
+                      <option key={country.iso2} value={country.iso2}>{country.name}</option>
+                    ))}
+                  </select><br /><br></br>
+                  <label className='fw-bold'>State<span className= 'text-danger'>*</span></label><br />
+                  <select
+                    className= 'form-control mt-3 cursor'
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                  >
+                    <option value="">Select State</option>
+                    {states.map((state) => (
+                      <option key={state.iso2} value={state.iso2}>{state.name}</option>
+                    ))}
+                  </select><br /><br></br>
+                  <label className='fw-bold'>City<span className= 'text-danger'>*</span></label><br />
+                  <select
+                    className= 'form-control mt-3 cursor'
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  >
+                    <option value="">Select City</option>
+                    {cities.map((city) => (
+                      <option key={city.id} value={city.name}>{city.name}</option>
+                    ))}
+                  </select><br /><br></br>
+                  <label className='fw-bold'>Zipcode</label><br />
+                  <input
+                    className= 'form-control mt-3 cursor'
+                    placeholder='Enter Zipcode'
+                    value={zipcode}
+                    onChange={(e) => setZipcode(e.target.value)}
+                  /><br /><br></br>
+                  <label className='fw-bold'>Profile Picture</label><br />
+                  <input
+                    className= 'form-control mt-3 cursor'
+                    type='file'
+                    onChange={(e) => setProfilePic(e.target.files[0])}
+                  /><br /><br></br>
+                  <div className='d-flex justify-content-end'>
+                    <button type="submit" className="btn btn-primary mt-3">Add Teacher</button>
+                  </div>
+                </form>
               </div>
-
-              
             </div>
           </div>
-          
+        </div>
+
   );
 };
 
-export default Teacherregister;
+export default Addteachers;

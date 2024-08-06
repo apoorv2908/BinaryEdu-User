@@ -1,0 +1,38 @@
+.ap{
+    margin-top: 150px;
+}
+
+.zu{
+    border-color: #212529;
+    color: white;
+}
+
+.profile-pic {
+    border: 1px solid black;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .profile-pic-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .div-width{
+    width: 200px;
+  }
+  
+
+@media (max-width: 500px) {
+    .profile-cont {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+}

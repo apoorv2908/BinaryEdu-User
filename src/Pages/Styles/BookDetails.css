@@ -8,7 +8,7 @@
   
   .book-coverx {
     max-width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 8px;
   }
   
@@ -17,6 +17,9 @@
     width: 100%;
   }
   
+  .hipi{
+    height: 550px;
+  }
 
 
   .zo {
@@ -25,3 +28,18 @@
     background-repeat: no-repeat;
 }
 
+.chapter-box{
+  background-color: lightgray;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.chapter-box:hover{
+  font-weight: bold;
+}
+
+.share-logo{
+  height: 25px;
+  width: 25px;
+}

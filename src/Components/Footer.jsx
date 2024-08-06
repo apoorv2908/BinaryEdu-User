@@ -7,15 +7,7 @@ const Footer = () => {
     return (
         <footer className=" text-white pt-5 pb-4" style={{ backgroundColor: "#000029" }}>
             <Container>
-                <Row className="mb-5">
-                    <Col md={8} className="mb-4">
-                        <h5 className="text-uppercase">Subscribe to Newsletter</h5>
-                        <Form className="d-flex">
-                            <Form.Control type="email" placeholder="Enter Your Email" className="me-2" />
-                            <Button variant="primary">Submit</Button>
-                        </Form>
-                    </Col>
-                </Row>
+                
                 <Row>
                     <Col md={4} className="mb-4">
                         <h5 className="text-uppercase">Binary Education</h5>
@@ -56,25 +48,15 @@ const Footer = () => {
                         <ul className="list-unstyled">
                             <li>Books</li>
                             <li>Subjects</li>
-                            <li>Resources</li>
-                            <li>Profile</li>
                             <li>Login/Register</li>
                         </ul>
                     </Col>
                     <Col md={2} className="mb-4">
-                        <h5 className="text-uppercase">Recent Posts</h5>
-                        <ul className="list-unstyled">
-                            <li>
-                                <img src="path/to/image1.jpg" alt="Post" className="me-2" />
-                                University While The Lovely Valley Team Work
-                                <span>September 20, 2020</span>
-                            </li>
-                            <li>
-                                <img src="path/to/image2.jpg" alt="Post" className="me-2" />
-                                High School Program Starting Soon 2021
-                                <span>September 14, 2020</span>
-                            </li>
-                        </ul>
+                    <h5 className="text-uppercase">Subscribe to Newsletter</h5>
+                        <Form>
+                            <Form.Control type="email" placeholder="Enter Your Email"/>
+                            <Button variant="primary">Submit</Button>
+                        </Form>
                     </Col>
                 </Row>
             </Container>
