@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+
 import './App.css';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
@@ -15,19 +17,35 @@ import Schoollogin from './Components/Access/Schoollogin';
 import Subjects from './Pages/Subjects';
 import ContactPage from './Components/ContactPage';
 import Studentregister from './Components/Access/Studentregister';
-import Dashboard from './Pages/Dashboard';
+import TeacherDashboard from './Pages/TeacherDashboard';
 import ProtectedRoute from './Components/Access/ProtectedRoute';
 import ChapterPages from './Pages/ChapterPages';
 import LoginRequiredModal from './Components/Access/LoginRequiredModal';
 import Updatestudents from './Components/Access/Updatestudents';
+import Dashboardbooks from './Pages/Dashboardbooks';
+import StudentDashboard from './Pages/StudentDashboard';
+import Popularbooks from './Components/Popularbooks';
+import Headerdashboard from './Components/Headerdashboard';
+import Bookpages from './Pages/Bookpages';
+import Dashboardbooksstudents from './Pages/Dashboardbooksstudents';
+import MybookChapterpages from './Pages/MybookChapterpages';
+import Bookpages2 from './Pages/Bookpages2';
 
 function App() {
+
+
   return (
+    
     <div className="App">
+
+
       <AuthProvider>
+
         <Router>
-          <Header />
-          <Routes>
+          <Header/>
+        <Content />
+          
+          <Routes>  
             <Route
               path="/"
               element={
@@ -117,15 +135,41 @@ function App() {
               }
             />
             <Route
-              path="/user-dashboard/:id"
+              path="/teacher-dashboard/:teacher_id"
               element={
                 <ProtectedRoute>
-                  <Page title="User Dashboard - Binary Education">
-                    <Dashboard />
+                  <Page title="Dashboard Teacher - Binary Education">
+                    <TeacherDashboard />
                   </Page>
                 </ProtectedRoute>
               }
             />
+
+
+
+<Route
+              path="/our-popular-books"
+              element={
+                  <Page title="Our Popular Books - Binary Education">
+                    <Popularbooks />
+                  </Page>
+              }
+            />
+
+
+<Route
+              path="/student-dashboard/:student_id"
+              element={
+                <ProtectedRoute>
+                  <Page title="Dashboard Student - Binary Education">
+                    <StudentDashboard />
+                  </Page>
+                </ProtectedRoute>
+              }
+            />
+
+
+
 
 <Route
               path="/edit-student/:id"
@@ -138,6 +182,62 @@ function App() {
               }
             />
 
+
+<Route
+              path="/book-details/:book_id"
+              element={
+                <ProtectedRoute>
+                  <Page title="Your books - Binary Education">
+                    <Dashboardbooks />
+                  </Page>
+                </ProtectedRoute>
+              }
+            />
+
+
+<Route
+              path="/my-book-details/:book_id"
+              element={
+                <ProtectedRoute>
+                  <Page title="Your books - Binary Education">
+                    <Dashboardbooksstudents />
+                  </Page>
+                </ProtectedRoute>
+              }
+            />
+
+<Route
+              path="/my-book-pages/:chapter_id"
+              element={
+                <ProtectedRoute>
+                  <Page title="Your books - Binary Education">
+                    <MybookChapterpages />
+                  </Page>
+                </ProtectedRoute>
+              }
+            />
+
+<Route
+              path="/book-pages/:book_id"
+              element={
+                <ProtectedRoute>
+                  <Page title="Your books - Binary Education">
+                    <Bookpages />
+                  </Page>
+                </ProtectedRoute>
+              }
+            />
+
+<Route
+              path="/book-page/:book_id"
+              element={
+                <ProtectedRoute>
+                  <Page title="Your books - Binary Education">
+                    <Bookpages2 />
+                  </Page>
+                </ProtectedRoute>
+              }
+            />
 
 <Route
               path="/chapterpages/:chapter_id"
@@ -156,6 +256,23 @@ function App() {
       </AuthProvider>
     </div>
   );
+
+  function Content() {
+    const location = useLocation();
+  
+    return (
+      <div className="App">
+        {location.pathname !== '/teacher-dashboard/:teacher_id' && <Header />}
+        
+      </div>
+    );
+  }
+  
+
 }
+
+
+
+
 
 export default App;

@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Card, Container, Carousel, Row, Col, Button } from 'react-bootstrap';
 import "./Styles/BookList.css"
 import config from "../config"
+import { Link } from 'react-router-dom';
+import { decodeId } from '../Components/Access/EncodeDecode';
+import { encodeId } from '../Components/Access/EncodeDecode';
+
 
 
 const BookList = () => {
@@ -46,15 +50,17 @@ const BookList = () => {
             <Row>
               {chunk.map((book) => (
                 <Col key={book.book_id} sm={6} md={4} lg={3} className="mb-4">
-                  <Card>
+                  <Card className= 'adjust'>
+                  <Link to={`/book/${encodeId(book.book_id)}`} className="book-link">
                     {book.book_cover && (
                       <Card.Img
                         variant="top"
-                        src={`${config.apiBaseUrl}/fullmarks-server/uploads/${book.book_cover}`}
+                        src={`${config.apiBaseUrl}/admin/fullmarks-server/uploads/book_cover/${book.book_cover}`}
                         alt={book.book_name}
-                        style={{ height: '300px', objectFit: 'cover' }}
+                        style={{ objectFit: 'cover' }}
                       />
                     )}
+                    </Link>
                     <Card.Body>
                       <Card.Title>{book.book_name}</Card.Title>
                     </Card.Body>
@@ -66,7 +72,7 @@ const BookList = () => {
         ))}
       </Carousel>
       <div className="text-center mt-4">
-        <Button variant="warning" className="px-4">View All Books</Button>
+        <Link to = "./our-popular-books"><Button  variant="warning" className="px-4">View All Books</Button></Link>
       </div>
     </div>
     </div>

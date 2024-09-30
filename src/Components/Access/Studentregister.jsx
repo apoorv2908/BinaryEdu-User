@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navbar, Nav, NavDropdown, Container, Modal, Button, Form } from 'react-bootstrap';
 import config from '../../config';
-
 
 const Studentregister = () => {
   const [studentName, setStudentName] = useState('');
@@ -20,6 +18,7 @@ const Studentregister = () => {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [profilePic, setProfilePic] = useState(null);  // New state for profile picture
   const navigate = useNavigate();
 
   const apiKey = 'SmNzN3BHZTFvRTlmQW43MG01M0hleThOVFFGVnF6c0RPbEF4cmJIRQ==';
@@ -44,7 +43,7 @@ const Studentregister = () => {
 
   const fetchSchools = async () => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/fullmarks-server/Users/Schools/fetchschools.php`);
+      const response = await fetch(`${config.apiBaseUrl}/fullmarks-user/addtnl/fetchschools.php`);
       const data = await response.json();
       if (data.success) {
         setSchools(data.schools);
@@ -58,7 +57,7 @@ const Studentregister = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/fullmarks-server/Masterfilter/Classes/fetchclasses.php`);
+      const response = await fetch(`${config.apiBaseUrl}/fullmarks-user/addtnl/fetchclasses.php`);
       const data = await response.json();
       if (data.success) {
         setClasses(data.classes);
@@ -114,18 +113,31 @@ const Studentregister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('studentName', studentName);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('contactNumber', contactNumber);
+    formData.append('country', country);
+    formData.append('state', state);
+    formData.append('city', city);
+    formData.append('zipcode', zipcode);
+    formData.append('school', school);
+    formData.append('className', className);
+    if (profilePic) {
+      formData.append('profilePic', profilePic);
+    }
+
     try {
-      const response = await fetch(`${config.apiBaseUrl}/fullmarks-server/Users/Students/addstudents.php`, {
+      const response = await fetch(`${config.apiBaseUrl}/fullmarks-user/user/addstudents.php`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ studentName, email, password, contactNumber, country, state, city, zipcode, school, className }),
+        body: formData,
       });
       const data = await response.json();
       if (data.success) {
         alert('Student added successfully');
-        navigate("/login-student")
+        navigate("/login-student");
       } else {
         alert('Failed to add student');
       }
@@ -136,90 +148,65 @@ const Studentregister = () => {
   };
 
   return (
-    <div className='m-5 p-5'>
-    <div className= 'd-flex justify-content-center'>
-  <div className="col-md-12">
-  <div className= ''>
-            Home / Login / Register
-        </div>
-        
-    
-    <div className=" p-4 mt-3 bg-light shadow-lg mb-5 bg-white rounded">
-      <div className='h5 p-2' style={{ backgroundColor: "#0A1172", borderRadius: "5px", color: "white" }}>Registration (Student)</div>
+    <div>
+      
+          <div className="col-md-12">
+              <div className="row">
+               
+                  <form onSubmit={handleSubmit} encType="multipart/form-data">
+                  <div className= 'p-1 mata text-white mb-2 rounded'>PERSONAL INFORMATION</div>
 
-                       
-                  <form onSubmit={handleSubmit}>
-                  <br></br>
-<div>
-
-                    <div>
-                    <label className= 'fw-bold'>Student Name</label>
+                                   <label className='fw-bold'>Student Name<span className= 'text-danger'>*</span></label><br />
                     <input
-                      className='mt-3 xyf cursor form-control'
+                      className='form-control  cursor'
                       placeholder='Enter Student Name'
                       value={studentName}
-                      required = "true"
+                      required
                       onChange={(e) => setStudentName(e.target.value)}
-
                     /><br></br>
-                    </div>
-
-
-                   
-
-
-
-
-                  
-
-                    <div>
-                    <label className= 'fw-bold'>Email</label>
+                    <label className='fw-bold'>Email<span className= 'text-danger'>*</span></label><br />
                     <input
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       type='email'
                       placeholder='Enter Email'
                       value={email}
-                      required = "true"
+                      required
                       onChange={(e) => setEmail(e.target.value)}
                     /><br />
-                    </div>
-
-
-
-
-
-                    <div>
-                    <label className= 'fw-bold'>Contact Number</label><br />
+                    <label className='fw-bold'>Contact Number<span className= 'text-danger'>*</span></label><br />
                     <input
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       placeholder='Enter Contact Number'
                       value={contactNumber}
-                      required = "true"
+                      required
                       onChange={(e) => setContactNumber(e.target.value)}
-                    /><br />
-                    </div>
+                    />
+                 
+                <br></br>
+                
+                    <label className='fw-bold'>Profile Picture</label><br />
+                    <input
+                      className='form-control  cursor'
+                      type="file"
+                      onChange={(e) => setProfilePic(e.target.files[0])}
+                    /><br></br>
+                <div className= 'p-1 mata text-white mb-2 rounded'>ACADEMIC INFORMATION</div>
 
-
-                    <div><label className= 'fw-bold'>School</label><br />
+                    <label className='fw-bold'>School<span className= 'text-danger'>*</span></label><br />
                     <select
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       value={school}
-                      required = "true"
+                      required
                       onChange={(e) => setSchool(e.target.value)}
                     >
                       <option value="">Select School</option>
                       {schools.map((school) => (
                         <option key={school.school_id} value={school.school_id}>{school.school_name}</option>
                       ))}
-                    </select><br /></div>
-
-
-
-
-                    <div>
-                    <label className= 'fw-bold'>Class</label><br />
+                    </select><br />
+                    <label className='fw-bold'>Class<span className= 'text-danger'>*</span></label><br />
                     <select
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       value={className}
                       onChange={(e) => setClassName(e.target.value)}
                     >
@@ -228,19 +215,13 @@ const Studentregister = () => {
                         <option key={classItem.class_id} value={classItem.class_name}>{classItem.class_name}</option>
                       ))}
                     </select><br />
-                    </div>
+                    <div className= 'p-1 mata text-white mb-2 rounded'>GEOGRAPHICAL INFORMATION</div>
 
-
-                     
-
-
-
-                    <div>
-                    <label className= 'fw-bold'>Country</label><br />
+                    <label className='fw-bold'>Country<span className= 'text-danger'>*</span></label><br />
                     <select
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       value={country}
-                      required = "true"
+                      required
                       onChange={(e) => setCountry(e.target.value)}
                     >
                       <option value="">Select Country</option>
@@ -248,13 +229,9 @@ const Studentregister = () => {
                         <option key={country.iso2} value={country.iso2}>{country.name}</option>
                       ))}
                     </select><br />
-                    </div>
-
-
-                    <div>
-                    <label className= 'fw-bold'>State</label><br />
+                    <label className='fw-bold'>State<span className= 'text-danger'>*</span></label><br />
                     <select
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       value={state}
                       onChange={(e) => setState(e.target.value)}
                     >
@@ -263,61 +240,46 @@ const Studentregister = () => {
                         <option key={state.iso2} value={state.iso2}>{state.name}</option>
                       ))}
                     </select><br />
-                    </div>
 
-
-                    <div>
-                    <label className= 'fw-bold'>City</label><br />
+                    <label className='fw-bold'>City<span className= 'text-danger'>*</span></label><br />
                     <select
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                     >
                       <option value="">Select City</option>
                       {cities.map((city) => (
-                        <option key={city.id} value={city.name}>{city.name}</option>
+                        <option key={city.name} value={city.name}>{city.name}</option>
                       ))}
                     </select><br />
-                    </div>
 
-                    <div>
-                    <label className= 'fw-bold'>Zipcode</label><br />
+                    <label className='fw-bold'>Zipcode</label><br />
                     <input
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       placeholder='Enter Zipcode'
                       value={zipcode}
                       onChange={(e) => setZipcode(e.target.value)}
                     /><br />
-                    </div>
+                    
 
-                  </div>
-                    
-                    
-                   
-                    
-                    
-                    
-                    
-                 
+                    <div className= 'p-1 mata text-white mb-2 rounded'>PASSWORD</div>
 
-<div>
-                    <label className= 'fw-bold'>Password</label><br />
+                    <label className='fw-bold'>Password<span className= 'text-danger'>*</span></label><br />
                     <input
-                      className='form-control mt-3 cursor'
+                      className='form-control  cursor'
                       type='password'
                       placeholder='Enter Password'
                       value={password}
-                      required = "true"
+                      required
                       onChange={(e) => setPassword(e.target.value)}
-                    /><br /><br></br>
-                    </div>
-                    <div className= 'd-flex justify-content-end'>
-                    <button type="submit" style={{ backgroundColor: "#0A1172", outline: "none", border: "none"}} className="btn btn-primary mt-3">Register</button>
+                    /><br /><br />
+                    <div className= 'd-flex justify-content-end mt-2'>
+                    <button type="submit" className="btn btn-primary btn-custom">Register</button>
+
                     </div>
                   </form>
                 </div>
               </div>
-            </div>
             </div>
   );
 };

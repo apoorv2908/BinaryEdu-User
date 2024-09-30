@@ -46,10 +46,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     const token = generateToken();
-    const tokenExpiration = new Date().getTime() + 15 * 60 * 1000; // 15 minutes
+    const tokenExpiration = new Date().getTime() + 30 * 60 * 1000; // 15 minutes
 
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+    console.log(JSON.stringify(userData));
     localStorage.setItem('token', token);
     localStorage.setItem('tokenExpiration', tokenExpiration);
   };

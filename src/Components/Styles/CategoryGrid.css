@@ -27,11 +27,7 @@
     height: 200px;
     object-fit: cover;
   }
-  
-  .card-body {
-    background: rgba(0, 0, 0, 0.5);
-    color: #fff;
-  }
+
   
   .btn-warning {
     background-color: #ff7f00;

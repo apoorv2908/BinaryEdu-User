@@ -1,93 +1,145 @@
 import React, { useState } from 'react';
 import { Form, Button, Col, Row, Container } from 'react-bootstrap';
-import ReCAPTCHA from 'react-google-recaptcha';
 import './Styles/ContactPage.css';
+import config from "../config"
+
 
 const ContactPage = () => {
-  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const handleCaptchaChange = (value) => {
-    setCaptchaVerified(!!value);
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!captchaVerified) {
-      alert('Please complete the CAPTCHA verification');
-      return;
-    }
-    // Add your form submission logic here
+    
+    fetch(`${config.apiBaseUrl}/fullmarks-user/addtnl/reachusout.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Response from server:', data);
+        if (data.success) {
+          setMessage(data.message);
+          setFormData({
+            first_name: '',
+            last_name: '',
+            email: '',
+            phone: '',
+            message: ''
+          });
+        } else {
+          setError(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error submitting form:', error);
+        setError('There was an error submitting the form. Please try again.');
+      });
   };
-
+  
   return (
     <Container className="contact-page mt-5">
-      <Row className="mt-4 mb-2 bg-light rounded">
-        <Col md={6} className="contact-form">
+      <Row className="mt-4 mb-2 bg-light rounded"> 
+        <Col md={6} className="contact-form mt-3">
           <h2>Reach out to us!</h2>
           <p>
             Got a question about Lancer? Are you interested in partnering with us? Have some suggestions or just want to say hi? Contact us.
           </p>
+          {message && <div className="alert alert-success">{message}</div>}
+          {error && <div className="alert alert-danger">{error}</div>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formFirstName">
-              <Form.Control type="text" placeholder="First name" />
+              <Form.Control
+                type="text"
+                name="first_name"
+                placeholder="First name"
+                value={formData.first_name}
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
-            <br></br>
+            <br />
             <Form.Group controlId="formLastName">
-              <Form.Control type="text" placeholder="Last name" />
+              <Form.Control
+                type="text"
+                name="last_name"
+                placeholder="Last name"
+                value={formData.last_name}
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
-            <br></br>
+            <br />
             <Form.Group controlId="formEmail">
-              <Form.Control type="email" placeholder="Your Email Address" />
+              <Form.Control
+                type="email"
+                name="email"
+                placeholder="Your Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
-            <br></br>
+            <br />
             <Form.Group controlId="formPhone">
-              <Form.Control type="text" placeholder="Phone Number" />
+              <Form.Control
+                type="text"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+              />
             </Form.Group>
-            <br></br>
+            <br />
             <Form.Group controlId="formMessage">
-              <Form.Control as="textarea" rows={5} placeholder="Message" />
+              <Form.Control
+                as="textarea"
+                name="message"
+                rows={5}
+                placeholder="Message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+              />
             </Form.Group>
-            <br></br>
-
-            <ReCAPTCHA
-              sitekey="YOUR_GOOGLE_RECAPTCHA_SITE_KEY"
-              onChange={handleCaptchaChange}
-            />
-            <br></br>
-
-            <Button variant="primary" type="submit" className="submit-btn" disabled={!captchaVerified}>
+            <br />
+            <Button variant="primary" type="submit" className="submit-btn">
               Submit
             </Button>
           </Form>
         </Col>
-        <Col md={6} className="customer-care">
-          <h2>Customer Care</h2>
+        <Col md={6} className="customer-care mt-3">
+          <h2>Get in touch with us</h2>
           <p>Not sure where to start? Need help adding that extra mojo to your landing page? Just send us a note or get in touch with us:</p>
           <div className="customer-care-info">
-            <div className="person">
-              <img src="path-to-claudio-image.jpg" alt="Claudio Pleskonos" />
-              <div className="info">
-                <h5>Claudio Pleskonos</h5>
-                <p>claudio@lancer.com</p>
-              </div>
-            </div>
-            <div className="person">
-              <img src="path-to-noviel-image.jpg" alt="Noviel Rosenberg" />
-              <div className="info">
-                <h5>Noviel Rosenberg</h5>
-                <p>noviel@lancer.com</p>
-              </div>
-            </div>
+                                <i className="fa fa-map-marker me-3"></i>B-38, KC Tower, Adarsh Nagar, New Delhi - 110033<br></br>
+                                <i className="fas fa-phone me-2"></i> 011-41612670<br></br>
+                                <i className="fas fa-envelope me-2"></i> info@binaryedu.in
           </div>
-          <h3>Other ways to connect</h3>
+
+          <h3 className= 'mt-4'>Other ways to connect</h3>
           <p>
-            <span>📘</span> Be the first on your block to get product updates, announcements, read stories of (relatively) good content.
-            Join us on <a href="https://facebook.com">Facebook</a>.
+            <span>📘</span> Be the first on your block to get product updates, announcements, read stories.
+            Join us on <a href="https://www.facebook.com/officialbinaryeducation">Facebook</a> and <a href="https://www.instagram.com/officialbinaryeducation">Instagram</a>
           </p>
-          <p>
-            <span>🐦</span> Want the best tips on conversion optimization, landing pages, content marketing, SEO & SEM? Then follow us on
-            Twitter at <a href="https://twitter.com">Blenderapp</a>.
-          </p>
+         
         </Col>
       </Row>
     </Container>

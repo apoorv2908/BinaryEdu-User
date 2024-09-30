@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
 body{
-  font-family: "Noto Sans" !important;
+  font-family: "Outfit" !important;
 }
 
 
@@ -14,3 +14,10 @@ body{
 height: 600px;
 }
 
+.zoho{
+  margin-top: 100px;
+}
+
+.comb{
+  font-size: small;
+}

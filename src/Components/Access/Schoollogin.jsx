@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Form, Modal } from 'react-bootstrap';
 import config from '../../config';
 import AuthContext from './AuthContext';
-import { Link } from 'react-router-dom';
+import banner from '../Assets/banner-4.jpg';
+
 
 const Schoollogin = () => {
   const [loginEmail, setLoginEmail] = useState('');
@@ -73,24 +74,22 @@ const Schoollogin = () => {
   };
 
   return (
-    <div className='m-5 p-5'>
-        <div className= 'd-flex justify-content-center'>
-      <div className="col-md-8">
+    <div>
+    <div className="banner-container2">
+        <img className='bannerwindow' src={banner} alt="Banner" />
+        <div className="centered-text">Login/Registration (School)</div>
+      </div>
 
-        <div className= ''>
-            Home / Login 
-        </div>
-        
-        <div className=" p-4 mt-3 bg-light shadow-lg mb-5 bg-white rounded">
-          <div className='h5 p-2' style={{ backgroundColor: "#0A1172", borderRadius: "5px", color: "white" }}>Login (School)</div>
-          <Form onSubmit={handleLogin}>
-            <div className='d-flex justify-content-start text-red'>
-                *For School Registration, Please contact Admin
+    <div className='d-flex justify-content-center align-items-center mt-5'>
+      <div className="col-md-5 mt-5">
+        <div className=" p-4 bg-light border mb-5 bg-white rounded">
+        <h4 className="text-center" style={{ color: "#0A1172" }}>School Login</h4>
+        <Form onSubmit={handleLogin}>
+            <div className='text-center text-danger mb-4 fw-bold'>
+              *For School Registration, Please contact Admin
             </div>
-            <br></br>
 
-            <Form.Group controlId="loginEmail" className='input-group'>
-              <span className="input-group-text" id="basic-addon1">🔒</span>
+            <Form.Group controlId="loginEmail" className='input-group mb-3'>
               <Form.Control
                 type="text"
                 placeholder="Enter username"
@@ -98,9 +97,8 @@ const Schoollogin = () => {
                 onChange={(e) => setLoginEmail(e.target.value)}
               />
             </Form.Group>
-            <br></br><br></br>
-            <Form.Group controlId="loginPassword" className='input-group'>
-              <span className="input-group-text" id="basic-addon1">🔑</span>
+
+            <Form.Group controlId="loginPassword" className='input-group mb-3'>
               <Form.Control
                 type="password"
                 placeholder="Enter password"
@@ -108,22 +106,21 @@ const Schoollogin = () => {
                 onChange={(e) => setLoginPassword(e.target.value)}
               />
             </Form.Group>
-            <br></br>
-            <div className='d-flex justify-content-end'>
+
+            {loginError && <div className='text-danger mb-3 text-center'>{loginError}</div>}
+
+            <div className='d-flex justify-content-between'>
+              <span onClick={() => setShowForgotPasswordModal(true)} style={{ cursor: 'pointer', color: 'blue' }}>Forgot Password?</span>
               <Button type="submit" style={{ backgroundColor: "#0A1172", outline: "none", color: "white", border: "none" }}>Login</Button>
             </div>
-            <div className='mt-2 d-flex justify-content-end'>
-              <span onClick={() => setShowForgotPasswordModal(true)} style={{ cursor: 'pointer', color: 'blue' }}>Forgot Password?</span>
-            </div>
-            {loginError && <div>{loginError}</div>}
           </Form>
         </div>
       </div>
-      </div>
 
+      {/* Modal for Forgot Password */}
       <Modal show={showForgotPasswordModal} onHide={() => setShowForgotPasswordModal(false)}>
         <Modal.Header style={{ backgroundColor: "#0A1172", color: "white" }} closeButton>
-          <Modal.Title >Reset Password</Modal.Title>
+          <Modal.Title>Reset Password</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -166,6 +163,7 @@ const Schoollogin = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+    </div>
     </div>
   );
 };

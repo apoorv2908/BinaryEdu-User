@@ -42,7 +42,7 @@ const Addteachers = () => {
 
   const fetchSchools = async () => {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/fullmarks-server/Users/Schools/fetchschools.php`);
+      const response = await fetch(`${config.apiBaseUrl}/fullmarks-user/addtnl/fetchschools.php`);
       const data = await response.json();
       if (data.success) {
         setSchools(data.schools);
@@ -114,14 +114,14 @@ const Addteachers = () => {
     }
 
     try {
-      const response = await fetch(`${config.apiBaseUrl}/fullmarks-server/Users/Teachers/addteachers.php`, {
+      const response = await fetch(`${config.apiBaseUrl}/fullmarks-user/user/addteachers.php`, {
         method: 'POST',
         body: formData,
       });
       const data = await response.json();
       if (data.success) {
         alert('Teacher added successfully');
-        navigate("/teachers");
+        navigate("/login-teacher");
       } else {
         alert('Failed to add teacher');
       }
@@ -134,52 +134,47 @@ const Addteachers = () => {
   return (
     <div>
         <div className="col-md-12">
-            {/* Topbar */}
             <div className="row" >
-              <div className="col-md-12 bg-white shadow-lg mb-5 p-3 bg-white rounded " >
-                <div className='text-grey h5 p-3' style={{ backgroundColor: "#0A1172", borderRadius: "5px", color: "white" }}>
-                  Sign up as Teacher
-                </div>
-                <hr></hr>
+
                 <form onSubmit={handleSubmit}  encType="multipart/form-data">
-                  <label className='fw-bold'>Teacher Name<span className= 'text-danger'>*</span></label><br />
+                <div className= 'p-1 mata text-white mb-2 rounded'>PERSONAL INFORMATION</div>
+                  <label className='fw-bold'>Teacher Name<span className= 'text-danger'>*</span></label>
                   <input
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     placeholder='Enter Teacher Name'
                     value={teacherName}
                     onChange={(e) => setTeacherName(e.target.value)}
                     required
-                  /><br /><br></br>
+                  /><br />
                   <label className='fw-bold'>Email<span className= 'text-danger'>*</span></label><br />
                   <input
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     type='email'
                     placeholder='Enter Email'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                  /><br /><br></br>
-                  <label className='fw-bold'>Password<span className= 'text-danger'>*</span></label><br />
-                  <input
-                    className= 'form-control mt-3 cursor'
-                    type='password'
-                    placeholder='Enter Password'
-                    value={password}
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                  /><br /><br></br>
+                  /><br />
+                 
                   <label className='fw-bold'>Contact Number<span className= 'text-danger'>*</span></label><br />
                   <input
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     placeholder='Enter Contact Number'
                     value={contactNumber}
                     required
                     onChange={(e) => setContactNumber(e.target.value)}
-                  /><br /><br></br>
-      
+                  /><br />
+                   <label className='fw-bold'>Profile Picture</label><br />
+                  <input
+                    className= 'form-control  cursor'
+                    type='file'
+                    onChange={(e) => setProfilePic(e.target.files[0])}
+                  /><br />
+                      <div className= 'p-1 mata text-white mb-2 rounded'>ACADEMIC INFORMATION</div>
+
                   <label className='fw-bold'>School<span className= 'text-danger'>*</span></label><br />
                     <select
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     value={school}
                       onChange={(e) => setSchool(e.target.value)}
                       disabled={manualEntry} // Disable dropdown if manual entry is enabled
@@ -188,11 +183,12 @@ const Addteachers = () => {
                       {schools.map((school) => (
                         <option key={school.school_id} value={school.school_id}>{school.school_name}</option>
                       ))}
-                    </select><br /><br></br>
-                    <div className= 'fw-bold text-danger'>
+                    </select><br />
+                    <div className= 'fw-bold text-danger mb-3'>
                       <input
                         type="checkbox"
                         checked={manualEntry}
+                        className='cursor'
                         onChange={() => setManualEntry(!manualEntry)}
                       />{' '}
                       Didn't find your school? Enter manually
@@ -200,7 +196,7 @@ const Addteachers = () => {
                     {manualEntry && (
                       <div>
                         <input
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     placeholder='Enter School Name'
                           value={manualSchool}
                           onChange={(e) => setManualSchool(e.target.value)}
@@ -208,10 +204,11 @@ const Addteachers = () => {
                         /><br />
                       </div>
                     )}
-                    <br></br>
+                                   <div className= 'p-1 mata text-white mb-2 rounded'>GEOGRAPHICAL INFORMATION</div>
+
                   <label className='fw-bold'>Country<span className= 'text-danger'>*</span></label><br />
                   <select
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                   >
@@ -219,10 +216,10 @@ const Addteachers = () => {
                     {countries.map((country) => (
                       <option key={country.iso2} value={country.iso2}>{country.name}</option>
                     ))}
-                  </select><br /><br></br>
+                  </select><br />
                   <label className='fw-bold'>State<span className= 'text-danger'>*</span></label><br />
                   <select
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     value={state}
                     onChange={(e) => setState(e.target.value)}
                   >
@@ -230,10 +227,10 @@ const Addteachers = () => {
                     {states.map((state) => (
                       <option key={state.iso2} value={state.iso2}>{state.name}</option>
                     ))}
-                  </select><br /><br></br>
+                  </select><br />
                   <label className='fw-bold'>City<span className= 'text-danger'>*</span></label><br />
                   <select
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                   >
@@ -241,28 +238,32 @@ const Addteachers = () => {
                     {cities.map((city) => (
                       <option key={city.id} value={city.name}>{city.name}</option>
                     ))}
-                  </select><br /><br></br>
+                  </select><br />
                   <label className='fw-bold'>Zipcode</label><br />
                   <input
-                    className= 'form-control mt-3 cursor'
+                    className= 'form-control  cursor'
                     placeholder='Enter Zipcode'
                     value={zipcode}
                     onChange={(e) => setZipcode(e.target.value)}
-                  /><br /><br></br>
-                  <label className='fw-bold'>Profile Picture</label><br />
+                  /><br />
+                 
+                    <div className= 'p-1 mata text-white mb-2 rounded'>PASSWORD</div>
+                    <label className='fw-bold'>Password<span className= 'text-danger'>*</span></label><br />
                   <input
-                    className= 'form-control mt-3 cursor'
-                    type='file'
-                    onChange={(e) => setProfilePic(e.target.files[0])}
-                  /><br /><br></br>
+                    className= 'form-control  cursor'
+                    type='password'
+                    placeholder='Enter Password'
+                    value={password}
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                  /><br />
                   <div className='d-flex justify-content-end'>
-                    <button type="submit" className="btn btn-primary mt-3">Add Teacher</button>
+                    <button type="submit" className="btn btn-primary mt-3 btn-custom">Register</button>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-        </div>
 
   );
 };

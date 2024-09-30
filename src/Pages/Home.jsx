@@ -6,19 +6,19 @@ import a2 from "./Assets/a2.jpg";
 import a3 from "./Assets/a3.jpg";
 import a4 from "./Assets/a4.jpg";
 import "./Styles/Home.css";
-import CategoryGrid from '../Components/CategoryGrid';
-import Newsfeed from '../Components/Newsfeed';
-import Testimonials from '../Components/Testimonials';
-import Aboutus from '../Components/Aboutus';
+import config from "../config"; // Your config file with API base URL
+import { Link } from 'react-router-dom'; // Import Link for navigation
 
 const banners = [
   { src: a4, text: "Join Our Learning Community", buttonText: "Start Now" },
 ];
 
-  
 const Home = () => {
   const [currentBanner, setCurrentBanner] = useState(0);
   const [fadeIn, setFadeIn] = useState(true);
+  const [aboutUsContent, setAboutUsContent] = useState('');
+  const [aboutUsPreview, setAboutUsPreview] = useState('');
+  const previewLength = 290; // Number of characters to show in preview
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,6 +36,20 @@ const Home = () => {
     document.title = 'Home';
   }, []);
 
+  useEffect(() => {
+    fetch(`${config.apiBaseUrl}/fullmarks-user/navbar/fetchaboutus.php`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setAboutUsContent(data.content);
+          setAboutUsPreview(data.content.length > previewLength ? `${data.content.substring(0, previewLength)}...` : data.content);
+        } else {
+          console.error('Failed to fetch content:', data.message);
+        }
+      })
+      .catch(error => console.error('Error fetching About Us content:', error));
+  }, []);
+
   return (
     <Container fluid className='p-0'>
       <Row className='p-0'>
@@ -47,10 +61,19 @@ const Home = () => {
               <Button className="banner-button btn-lg">{banners[currentBanner].buttonText}</Button>
             </div>
           </div>
-          <Aboutus/>
+          <p className="text-center mb-3 h6 rn1" style={{ color: "#0A1172" }}></p>
+          <div className='about-title text-warning h5 mt-5 fw-bold px-5'>ABOUT BINARY EDUCATION</div>
+          <div className='px-5 fs-5 mb-4'>
+            <div dangerouslySetInnerHTML={{ __html: aboutUsPreview }} />
+            {aboutUsContent.length > previewLength && (
+              <div className= 'd-flex justify-content-center'>
+              <Link to="/about">
+                <button variant="link" className="mt-2 btn btn-success">Read More</button>
+              </Link>
+              </div>
+            )}
+          </div>
           <BookList />
-          <Newsfeed/>
-          <Testimonials/>
         </Col>
       </Row>
     </Container>
